@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookHub | Next-Gen Reading Experience</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%235e35b1'/%3E%3Cpath d='M16 20v24a4 4 0 004 4h24' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M48 44V20a4 4 0 00-4-4H20' fill='none' stroke='%2300b4d8' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #5e35b1;
+            --secondary: #4527a0;
+            --accent: #00b4d8;
+            --neon: #00f5d4;
+            --success: #00e676;
+            --warning: #ffd600;
+            --danger: #ff5252;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #f8f9fa;
+            --card-bg: rgba(30, 30, 46, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(18, 18, 18, 0.7);
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3cc;
+            --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+        
+        /* Layout */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        
+        /* Header */
+        header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 30px;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--accent), var(--neon));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 12px;
+            font-size: 36px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin: 0 18px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+            font-size: 18px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--accent), var(--neon));
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-icons {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-icons i {
+            font-size: 22px;
+            margin-left: 25px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .nav-icons i:hover {
+            color: var(--neon);
+        }
+        
+        .user-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            margin-left: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(94, 53, 177, 0.5);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 150px 0 100px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(94,53,177,0.1) 0%, rgba(18,18,18,0) 70%);
+            z-index: -1;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 30px;
+            line-height: 1.1;
+            background: linear-gradient(to right, var(--text-primary), var(--neon));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 50px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 42px;
+            background: linear-gradient(135deg, var(--accent), var(--neon));
+            color: var(--dark);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 20px rgba(0, 26, 141, 0.4);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            margin: 0 auto;
+            width: fit-content;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(52, 96, 109, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(-2px);
+        }
+        
+        .btn i {
+            margin-left: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn:hover i {
+            transform: translateX(5px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--neon);
+            border: 2px solid var(--neon);
+            margin-left: 25px;
+            box-shadow: 0 5px 20px rgba(0, 95, 150, 0.3);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(0, 245, 212, 0.1);
+        }
+        
+        /* Section Styling */
+        .section {
+            padding: 120px 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(to right, var(--accent), var(--neon));
+            border-radius: 3px;
+        }
+        
+        .section-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            max-width: 900px;
+            margin: 35px auto 0;
+            line-height: 1.8;
+        }
+        
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border-color: rgba(94, 53, 177, 0.5);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--accent), var(--neon));
+        }
+        
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            color: white;
+        }
+        
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        
+        .card-content {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        /* AI Recommendations */
+        .ai-recommendations {
+            position: relative;
+        }
+        
+        .ai-recommendations::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(94,53,177,0.2) 0%, rgba(18,18,18,0) 70%);
+            z-index: -1;
+        }
+        
+        .ai-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .ai-visual {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ai-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,180,216,0.1) 0%, transparent 70%);
+        }
+        
+        .ai-content {
+            padding: 20px;
+        }
+        
+        .ai-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, var(--neon), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .ai-features {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+        
+        .ai-features li {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .ai-features i {
+            color: var(--neon);
+            margin-right: 15px;
+            font-size: 1.4rem;
+            margin-top: 5px;
+        }
+        
+        /* AR Experience */
+        .ar-experience {
+            background: linear-gradient(135deg, rgba(30, 30, 46, 0.8), rgba(18, 18, 40, 0.9));
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ar-experience::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon fill="rgba(0,180,216,0.05)" points="0,100 100,0 100,100"/></svg>');
+            background-size: cover;
+            opacity: 0.2;
+        }
+        
+        .ar-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .ar-content {
+            padding: 20px;
+        }
+        
+        .ar-visual {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 30px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,245,212,0.1) 0%, transparent 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon);
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        /* Blockchain */
+        .blockchain-features {
+            position: relative;
+        }
+        
+        .blockchain-features::before {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(94,53,177,0.2) 0%, rgba(18,18,18,0) 70%);
+            z-index: -1;
+        }
+        
+        /* Metaverse Library */
+        .metaverse-library {
+            background: linear-gradient(135deg, rgba(30, 30, 46, 0.8), rgba(18, 18, 40, 0.9));
+        }
+        
+        .metaverse-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .metaverse-visual {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            height: 400px;
+            margin: 60px auto;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .metaverse-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,245,212,0.1) 0%, transparent 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neon);
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--darker);
+            padding: 100px 0 50px;
+            position: relative;
+            border-top: 1px solid var(--card-border);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.6rem;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 15px;
+            color: var(--text-primary);
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent), var(--neon));
+            border-radius: 2px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 18px;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .footer-links a i {
+            margin-right: 12px;
+            color: var(--neon);
+            transition: transform 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--neon);
+            transform: translateX(5px);
+        }
+        
+        .footer-links a:hover i {
+            transform: translateX(5px);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: var(--transition);
+            border: 1px solid var(--card-border);
+            font-size: 1.4rem;
+        }
+        
+        .social-links a:hover {
+            background: linear-gradient(135deg, var(--accent), var(--neon));
+            color: var(--dark);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 180, 216, 0.4);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 50px;
+            border-top: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .ai-container,
+            .ar-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .ai-visual,
+            .ar-visual {
+                height: 400px;
+            }
+            
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.8rem;
+            }
+            
+            .btn-container {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                margin: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-book-open"></i>
+                    <span>BookHub</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#library">Library</a></li>
+                    <li><a href="#metaverse">Metaverse</a></li>
+                    <li><a href="#ai-features">AI Features</a></li>
+                    <li><a href="#technology">Technology</a></li>
+                    <li><a href="#footer">More</a></li>
+                </ul>
+                <div class="nav-icons">
+                    <i class="fas fa-robot" style="cursor:pointer;" title="Chat with AI" onclick="window.open('https://chat.openai.com/', '_blank');"></i>
+                    <div class="user-avatar">
+                        <img src="image/profile.jpg" alt="User Avatar" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" onclick="toggleMobileMenu()" />
+
+                        <!-- Mobile Nav Menu (hidden by default) -->
+                        <div id="mobileNavMenu" style="display:none; position:fixed; top:40px; right:2px; background:rgb(31, 30, 30); border-radius:18px; box-shadow:var(--card-shadow); z-index:9999; padding:24px 32px;">
+                            <ul style="list-style:none; padding:0; margin:0;">
+                                <li style="margin-bottom:18px;"><a href="#home" style="color:var(--text-primary); text-decoration:none; font-size:1.2rem;">Home</a></li>
+                                <li style="margin-bottom:18px;"><a href="#library" style="color:var(--text-primary); text-decoration:none; font-size:1.2rem;">Library</a></li>
+                                <li style="margin-bottom:18px;"><a href="#metaverse" style="color:var(--text-primary); text-decoration:none; font-size:1.2rem;">Metaverse</a></li>
+                                <li style="margin-bottom:18px;"><a href="#ai-features" style="color:var(--text-primary); text-decoration:none; font-size:1.2rem;">AI Features</a></li>
+                                <li style="margin-bottom:18px;"><a href="#technology" style="color:var(--text-primary); text-decoration:none; font-size:1.2rem;">Technology</a></li>
+                                <li><a href="#footer" style="color:var(--text-primary); text-decoration:none; font-size:1.2rem;">More</a></li>
+                            </ul>
+                        </div>
+                        <script>
+                        function toggleMobileMenu() {
+                            var menu = document.getElementById('mobileNavMenu');
+                            if (window.innerWidth <= 900) {
+                                menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'block' : 'none';
+                            }
+                        }
+                        // Optional: Hide menu when clicking outside
+                        document.addEventListener('click', function(e) {
+                            var menu = document.getElementById('mobileNavMenu');
+                            var avatar = document.querySelector('.user-avatar img');
+                            if (!menu.contains(e.target) && e.target !== avatar) {
+                                menu.style.display = 'none';
+                            }
+                        });
+                        </script>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>The Future of Reading is Here</h1>
+                <p>BookNexus 2025 combines AI intelligence, blockchain technology, and immersive experiences to revolutionize how you read, learn, and interact with books.</p>
+                <div class="btn-container">
+                    <a href="#library" class="btn">Start Free Trial <i class="fas fa-arrow-right"></i></a>
+                    <a href="#ai-features" class="btn btn-outline">Explore Features <i class="fas fa-compass"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Library Section -->
+    <section class="section" id="library">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Your Personal Library</h2>
+                <p class="section-subtitle">Access a vast collection of books, articles, and resources tailored to your interests</p>
+            </div>
+        </div>
+        <div class="library-toolbar">
+            <div class="categories" style="display: flex; flex-wrap: wrap; gap: 18px; margin: 30px 0 40px 0; justify-content: center;">
+                <div class="category" style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; padding: 12px 32px; border-radius: 30px; font-weight: 600; font-size: 1.1rem; box-shadow: 0 4px 16px rgba(94,53,177,0.12); cursor: pointer; transition: background 0.3s, transform 0.3s;">
+                    JavaScript
+                </div>
+                <div class="category" style="background: linear-gradient(135deg, var(--accent), var(--neon)); color: var(--dark); padding: 12px 32px; border-radius: 30px; font-weight: 600; font-size: 1.1rem; box-shadow: 0 4px 16px rgba(0,180,216,0.12); cursor: pointer; transition: background 0.3s, transform 0.3s;">
+                    React
+                </div>
+                <div class="category" style="background: linear-gradient(135deg, var(--secondary), var(--primary)); color: #fff; padding: 12px 32px; border-radius: 30px; font-weight: 600; font-size: 1.1rem; box-shadow: 0 4px 16px rgba(69,39,160,0.12); cursor: pointer; transition: background 0.3s, transform 0.3s;">
+                    Node.js
+                </div>
+                <div class="category" style="background: linear-gradient(135deg, var(--accent), var(--primary)); color: #fff; padding: 12px 32px; border-radius: 30px; font-weight: 600; font-size: 1.1rem; box-shadow: 0 4px 16px rgba(0,180,216,0.12); cursor: pointer; transition: background 0.3s, transform 0.3s;">
+                    CSS
+                </div>
+                <div class="category" style="background: linear-gradient(135deg, var(--neon), var(--accent)); color: var(--dark); padding: 12px 32px; border-radius: 30px; font-weight: 600; font-size: 1.1rem; box-shadow: 0 4px 16px rgba(0,245,212,0.12); cursor: pointer; transition: background 0.3s, transform 0.3s;">
+                    Python
+                </div>
+                <div class="category" style="background: linear-gradient(135deg, var(--primary), var(--neon)); color: #fff; padding: 12px 32px; border-radius: 30px; font-weight: 600; font-size: 1.1rem; box-shadow: 0 4px 16px rgba(94,53,177,0.12); cursor: pointer; transition: background 0.3s, transform 0.3s;">
+                    Web Design
+                </div>
+                <div class="category" style="background: linear-gradient(135deg, var(--secondary), var(--accent)); color: #fff; padding: 12px 32px; border-radius: 30px; font-weight: 600; font-size: 1.1rem; box-shadow: 0 4px 16px rgba(69,39,160,0.12); cursor: pointer; transition: background 0.3s, transform 0.3s;">
+                    Databases
+                </div>
+            </div>
+            <!-- Books Grid -->
+            <div class="books-grid" style="display: flex; flex-wrap: wrap; gap: 36px; justify-content: center; margin-bottom: 40px;">
+                <!-- Book 1 -->
+                <div class="book-card" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; width: 260px; box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="book-cover" style="height: 180px; overflow: hidden;">
+                        <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="You Don't Know JS" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="book-info" style="padding: 22px 18px 18px;">
+                        <h3 class="book-title" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">You Don't Know JS</h3>
+                        <p class="book-author" style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 14px;">Kyle Simpson</p>
+                        <div class="book-meta" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="book-rating" style="display: flex; align-items: center; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-star" style="margin-right: 4px;"></i>
+                                <span>4.7</span>
+                            </div>
+                            <div class="book-price" style="color: var(--neon); font-weight: 700;">$24.99</div>
+                            <div class="book-features" style="display: flex; gap: 8px; margin-left: 8px;">
+                                <span title="eBook Available" style="color: var(--neon); font-size: 1.1em;">
+                                    <i class="fas fa-tablet-alt" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                                <span title="Audio Book" style="color: var(--accent); font-size: 1.1em;">
+                                    <i class="fas fa-headphones" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Book 1.1 -->
+                <div class="book-card" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; width: 260px; box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="book-cover" style="height: 180px; overflow: hidden;">
+                        <img src="https://th.bing.com/th/id/OIP.bxoYgLfKhDbWhb7WPdTy2wHaDt?w=350&h=175&c=7&r=0&o=7&pid=1.7&rm=3" alt="Refactoring UI" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="book-info" style="padding: 22px 18px 18px;">
+                        <h3 class="book-title" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Refactoring UI</h3>
+                        <p class="book-author" style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 14px;">Adam Wathan & Steve</p>
+                        <div class="book-meta" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="book-rating" style="display: flex; align-items: center; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-star" style="margin-right: 4px;"></i>
+                                <span>4.8</span>
+                            </div>
+                            <div class="book-price" style="color: var(--neon); font-weight: 700;">$49.00</div>
+                            <div class="book-features" style="display: flex; gap: 8px; margin-left: 8px;">
+                                <span title="eBook Available" style="color: var(--neon); font-size: 1.1em;">
+                                    <i class="fas fa-tablet-alt" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                                <span title="Audio Book" style="color: var(--accent); font-size: 1.1em;">
+                                    <i class="fas fa-headphones" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Book 1.2 -->
+                <div class="book-card" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; width: 260px; box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="book-cover" style="height: 180px; overflow: hidden;">
+                        <img src="https://th.bing.com/th/id/OIP.Hnq6X06m60-7h3CDcRGGrgHaEK?w=317&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="The Pragmatic Programmer" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="book-info" style="padding: 22px 18px 18px;">
+                        <h3 class="book-title" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">The Pragmatic </h3>
+                        <p class="book-author" style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 14px;">Andrew Hunt </p>
+                        <div class="book-meta" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="book-rating" style="display: flex; align-items: center; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-star" style="margin-right: 4px;"></i>
+                                <span>4.9</span>
+                            </div>
+                            <div class="book-price" style="color: var(--neon); font-weight: 700;">$42.99</div>
+                            <div class="book-features" style="display: flex; gap: 8px; margin-left: 8px;">
+                                <span title="eBook Available" style="color: var(--neon); font-size: 1.1em;">
+                                    <i class="fas fa-tablet-alt" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                                <span title="Audio Book" style="color: var(--accent); font-size: 1.1em;">
+                                    <i class="fas fa-headphones" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 2 -->
+                <div class="book-card" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; width: 260px; box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="book-cover" style="height: 180px; overflow: hidden;">
+                        <img src="https://th.bing.com/th/id/OIP.4ZR5_OPaTkINDLXqeWm3VAHaFV?w=261&h=188&c=7&r=0&o=5&pid=1.7" alt="Designing Data-Intensive Applications" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="book-info" style="padding: 22px 18px 18px;">
+                        <h3 class="book-title" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Designing</h3>
+                        <p class="book-author" style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 14px;">Martin Kleppmann</p>
+                        <div class="book-meta" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="book-rating" style="display: flex; align-items: center; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-star" style="margin-right: 4px;"></i>
+                                <span>4.9</span>
+                            </div>
+                            <div class="book-price" style="color: var(--neon); font-weight: 700;">$44.99</div>
+                            <div class="book-features" style="display: flex; gap: 8px; margin-left: 8px;">
+                                <span title="eBook Available" style="color: var(--neon); font-size: 1.1em;">
+                                    <i class="fas fa-tablet-alt" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                                <span title="Audio Book" style="color: var(--accent); font-size: 1.1em;">
+                                    <i class="fas fa-headphones" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 3 -->
+                <div class="book-card" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; width: 260px; box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="book-cover" style="height: 180px; overflow: hidden;">
+                        <img src="https://th.bing.com/th/id/OIP.HKXl5p8pJKUBmXWJKgeQPAHaE8?w=255&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Eloquent JavaScript" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="book-info" style="padding: 22px 18px 18px;">
+                        <h3 class="book-title" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Eloquent JavaScript</h3>
+                        <p class="book-author" style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 14px;">Marijn Haverbeke</p>
+                        <div class="book-meta" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="book-rating" style="display: flex; align-items: center; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-star" style="margin-right: 4px;"></i>
+                                <span>4.6</span>
+                            </div>
+                            <div class="book-price" style="color: var(--neon); font-weight: 700;">$28.99</div>
+                            <div class="book-features" style="display: flex; gap: 8px; margin-left: 8px;">
+                                <span title="eBook Available" style="color: var(--neon); font-size: 1.1em;">
+                                    <i class="fas fa-tablet-alt" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                                <span title="Audio Book" style="color: var(--accent); font-size: 1.1em;">
+                                    <i class="fas fa-headphones" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 4 -->
+                <div class="book-card" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; width: 260px; box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="book-cover" style="height: 180px; overflow: hidden;">
+                        <img src="https://th.bing.com/th/id/OIP.zlSq7EO-k-PXi8GgUyT0QgHaEJ?w=303&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="JavaScript: The Good Parts" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="book-info" style="padding: 22px 18px 18px;">
+                        <h3 class="book-title" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">JavaScript</h3>
+                        <p class="book-author" style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 14px;">Douglas Crockford</p>
+                        <div class="book-meta" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="book-rating" style="display: flex; align-items: center; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-star" style="margin-right: 4px;"></i>
+                                <span>4.8</span>
+                            </div>
+                            <div class="book-price" style="color: var(--neon); font-weight: 700;">$29.99</div>
+                            <div class="book-features" style="display: flex; gap: 8px; margin-left: 8px;">
+                                <span title="eBook Available" style="color: var(--neon); font-size: 1.1em;">
+                                    <i class="fas fa-tablet-alt" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                                <span title="Audio Book" style="color: var(--accent); font-size: 1.1em;">
+                                    <i class="fas fa-headphones" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 5 -->
+                <div class="book-card" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; width: 260px; box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="book-cover" style="height: 180px; overflow: hidden;">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="React in Action" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="book-info" style="padding: 22px 18px 18px;">
+                        <h3 class="book-title" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">React in Action</h3>
+                        <p class="book-author" style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 14px;">Mark Tielens Thomas</p>
+                        <div class="book-meta" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="book-rating" style="display: flex; align-items: center; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-star" style="margin-right: 4px;"></i>
+                                <span>4.7</span>
+                            </div>
+                            <div class="book-price" style="color: var(--neon); font-weight: 700;">$34.99</div>
+                            <div class="book-features" style="display: flex; gap: 8px; margin-left: 8px;">
+                                <span title="eBook Available" style="color: var(--neon); font-size: 1.1em;">
+                                    <i class="fas fa-tablet-alt" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                                <span title="Audio Book" style="color: var(--accent); font-size: 1.1em;">
+                                    <i class="fas fa-headphones" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 6 -->
+                <div class="book-card" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; width: 260px; box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="book-cover" style="height: 180px; overflow: hidden;">
+                        <img src="https://th.bing.com/th/id/OIP.uyQDs2mE8VJ85v8YaEbAPAHaEK?w=313&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Clean Code" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="book-info" style="padding: 22px 18px 18px;">
+                        <h3 class="book-title" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Clean Code</h3>
+                        <p class="book-author" style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 14px;">Robert C. Martin</p>
+                        <div class="book-meta" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="book-rating" style="display: flex; align-items: center; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-star" style="margin-right: 4px;"></i>
+                                <span>4.9</span>
+                            </div>
+                            <div class="book-price" style="color: var(--neon); font-weight: 700;">$39.99</div>
+                            <div class="book-features" style="display: flex; gap: 8px; margin-left: 8px;">
+                                <span title="eBook Available" style="color: var(--neon); font-size: 1.1em;">
+                                    <i class="fas fa-tablet-alt" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                                <span title="Audio Book" style="color: var(--accent); font-size: 1.1em;">
+                                    <i class="fas fa-headphones" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 7 -->
+                <div class="book-card" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; width: 260px; box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="book-cover" style="height: 180px; overflow: hidden;">
+                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="CSS Mastery" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="book-info" style="padding: 22px 18px 18px;">
+                        <h3 class="book-title" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">CSS Mastery</h3>
+                        <p class="book-author" style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 14px;">Andy Budd</p>
+                        <div class="book-meta" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="book-rating" style="display: flex; align-items: center; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-star" style="margin-right: 4px;"></i>
+                                <span>4.6</span>
+                            </div>
+                            <div class="book-price" style="color: var(--neon); font-weight: 700;">$27.99</div>
+                            <div class="book-features" style="display: flex; gap: 8px; margin-left: 8px;">
+                                <span title="eBook Available" style="color: var(--neon); font-size: 1.1em;">
+                                    <i class="fas fa-tablet-alt" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                                <span title="Audio Book" style="color: var(--accent); font-size: 1.1em;">
+                                    <i class="fas fa-headphones" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 8 -->
+                <div class="book-card" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; width: 260px; box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="book-cover" style="height: 180px; overflow: hidden;">
+                        <img src="https://th.bing.com/th/id/OIP.VOGG10_elQyWEert_a0N5wHaD4?w=321&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Node.js Design Patterns" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="book-info" style="padding: 22px 18px 18px;">
+                        <h3 class="book-title" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Node.js Design</h3>
+                        <p class="book-author" style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 14px;">Mario Casciaro</p>
+                        <div class="book-meta" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="book-rating" style="display: flex; align-items: center; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-star" style="margin-right: 4px;"></i>
+                                <span>4.5</span>
+                            </div>
+                            <div class="book-price" style="color: var(--neon); font-weight: 700;">$36.99</div>
+                            <div class="book-features" style="display: flex; gap: 8px; margin-left: 8px;">
+                                <span title="eBook Available" style="color: var(--neon); font-size: 1.1em;">
+                                    <i class="fas fa-tablet-alt" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                                <span title="Audio Book" style="color: var(--accent); font-size: 1.1em;">
+                                    <i class="fas fa-headphones" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 9 -->
+                <div class="book-card" style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 18px; width: 260px; box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s;">
+                    <div class="book-cover" style="height: 180px; overflow: hidden;">
+                        <img src="https://th.bing.com/th/id/OIP.RTQdRj1eX2m0VBsHT8cYSQHaE8?w=284&h=189&c=7&r=0&o=7&pid=1.7&rm=3" alt="Python Crash Course" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="book-info" style="padding: 22px 18px 18px;">
+                        <h3 class="book-title" style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Python Crash Course</h3>
+                        <p class="book-author" style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 14px;">Eric Matthes</p>
+                        <div class="book-meta" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div class="book-rating" style="display: flex; align-items: center; color: var(--accent); font-weight: 600;">
+                                <i class="fas fa-star" style="margin-right: 4px;"></i>
+                                <span>4.8</span>
+                            </div>
+                            <div class="book-price" style="color: var(--neon); font-weight: 700;">$31.99</div>
+                            <div class="book-features" style="display: flex; gap: 8px; margin-left: 8px;">
+                                <span title="eBook Available" style="color: var(--neon); font-size: 1.1em;">
+                                    <i class="fas fa-tablet-alt" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                                <span title="Audio Book" style="color: var(--accent); font-size: 1.1em;">
+                                    <i class="fas fa-headphones" style="cursor: pointer;" onclick="window.open('https://jahidads.github.io/WorkHub/', '_blank');"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- AI-Powered Features -->
+    <section class="section" id="ai-features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">AI-Powered Intelligence</h2>
+                <p class="section-subtitle">Our advanced AI algorithms transform how you discover and interact with content</p>
+            </div>
+            
+            <div class="card-grid">
+                <!-- AI Card 1 -->
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="card-title">Neural Recommendations</h3>
+                    <p class="card-content">Our AI analyzes your reading patterns, eye movements, and cognitive responses to suggest books that match your learning style and interests.</p>
+                    <a href="https://sora.chatgpt.com/explore" class="btn btn-outline">Experience AI</a>
+                </div>
+                
+                <!-- AI Card 2 -->
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <h3 class="card-title">Adaptive Reading</h3>
+                    <p class="card-content">Content dynamically adjusts based on your reading speed, comprehension level, and focus patterns for optimal learning efficiency.</p>
+                    <a href="https://chatgpt.com/gpts" class="btn btn-outline">Try Adaptive Mode</a>
+                </div>
+                
+                <!-- AI Card 3 -->
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="card-title">AI Reading Assistant</h3>
+                    <p class="card-content">Get real-time explanations, summaries, and discussion points generated by our GPT-5 powered reading companion.</p>
+                    <a href="https://chatgpt.com/" class="btn btn-outline">Chat with AI</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advanced Recommendations -->
+    <section class="section ai-recommendations">
+        <div class="container">
+            <div class="ai-container">
+                <div class="ai-visual">
+                    <div style="text-align: center;">
+                        <i class="fas fa-microchip" style="font-size: 120px; color: var(--accent); margin-bottom: 30px;"></i>
+                        <h3 style="font-size: 2rem; color: var(--neon);">Neural Recommendation Engine</h3>
+                        <p style="color: var(--text-secondary); max-width: 400px;">Real-time analysis of your reading patterns and preferences</p>
+                    </div>
+                </div>
+                <div class="ai-content">
+                    <h2 class="ai-title">AI-Powered Personalization</h2>
+                    <ul class="ai-features">
+                        <li>
+                            <i class="fas fa-dna"></i>
+                            <div>
+                                <strong>Biometric Analysis</strong>
+                                <p>Our system monitors eye movement, reading speed, and comprehension to tailor content</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-project-diagram"></i>
+                            <div>
+                                <strong>Knowledge Mapping</strong>
+                                <p>AI creates personalized learning paths based on your existing knowledge and goals</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-sync-alt"></i>
+                            <div>
+                                <strong>Real-time Adaptation</strong>
+                                <p>Content difficulty and presentation adjust as you read for optimal comprehension</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-chart-network"></i>
+                            <div>
+                                <strong>Predictive Suggestions</strong>
+                                <p>AI anticipates your next interests before you even search for them</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="#library" class="btn">Enable Neural Mode <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AR Experience -->
+    <section class="section ar-experience">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Augmented Reality</h2>
+                <p class="section-subtitle">Bring books to life with our cutting-edge AR technology</p>
+            </div>
+            
+            <div class="ar-container">
+                <div class="ar-content">
+                    <h2 class="ai-title">Immersive Reading Experience</h2>
+                    <ul class="ai-features">
+                        <li>
+                            <i class="fas fa-vr-cardboard"></i>
+                            <div>
+                                <strong>3D Book Visualizations</strong>
+                                <p>See book scenes and characters come to life in your environment</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-globe-americas"></i>
+                            <div>
+                                <strong>Interactive Environments</strong>
+                                <p>Step into book settings with our spatial computing technology</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-user-friends"></i>
+                            <div>
+                                <strong>Holographic Characters</strong>
+                                <p>Interact with lifelike holograms of book characters and authors</p>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-graduation-cap"></i>
+                            <div>
+                                <strong>Educational Simulations</strong>
+                                <p>Experience complex concepts through interactive AR demonstrations</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="https://dev.to/" class="btn">Start AR Experience <i class="fas fa-vr-cardboard"></i></a>
+                </div>
+                <div class="ar-visual">
+                    <div class="ar-overlay">
+                        <div>
+                            <i class="fas fa-vr-cardboard" style="font-size: 60px; margin-bottom: 20px;"></i>
+                            <h3>Point your device to activate AR experience</h3>
+                            <p>Visualize book scenes in your environment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blockchain Features -->
+    <section class="section blockchain-features"  id="technology">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Blockchain Technology</h2>
+                <p class="section-subtitle">Own, trade, and protect your digital content like never before</p>
+            </div>
+            
+            <div class="card-grid">
+                <!-- Blockchain Card 1 -->
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <h3 class="card-title">NFT Books</h3>
+                    <p class="card-content">Own limited edition books as verifiable digital collectibles with exclusive content and author benefits.</p>
+                    <a href="https://www.thebookshopnft.com/?utm_source=chatgpt.com" class="btn btn-outline">Explore NFT Store</a>
+                </div>
+                
+                <!-- Blockchain Card 2 -->
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <h3 class="card-title">Digital Ownership</h3>
+                    <p class="card-content">Truly own your digital books with blockchain-verified ownership and transfer rights.</p>
+                    <a href="https://understandingdata.com/posts/what-is-a-digital-fingerprint/" class="btn btn-outline">View Your Collection</a>
+                </div>
+                
+                <!-- Blockchain Card 3 -->
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="card-title">Secure Transactions</h3>
+                    <p class="card-content">Industry-leading security with decentralized storage and encrypted transactions.</p>
+                    <a href="https://learn.microsoft.com/en-us/azure/defender-for-cloud/data-aware-security-dashboard-overview" class="btn btn-outline">Security Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metaverse Library -->
+    <section class="section metaverse-library" id="metaverse">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Metaverse Library</h2>
+                <p class="section-subtitle">Step into our virtual universe of knowledge and community</p>
+            </div>
+            
+            <div class="metaverse-content">
+                <div class="metaverse-visual">
+                    <div class="metaverse-overlay">
+                        <div>
+                            <i class="fas fa-globe" style="font-size: 60px; margin-bottom: 20px;"></i>
+                            <h3>Enter the BookNexus Metaverse</h3>
+                            <p>Join virtual reading rooms, author events, and knowledge hubs</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-grid">
+                    <div class="feature-card">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="card-title">Virtual Reading Rooms</h3>
+                        <p class="card-content">Join live reading sessions with authors and communities in immersive virtual environments.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="card-icon">
+                            <i class="fas fa-monument"></i>
+                        </div>
+                        <h3 class="card-title">Knowledge Landmarks</h3>
+                        <p class="card-content">Explore virtual libraries modeled after world-famous landmarks and fictional locations.</p>
+                    </div>
+                </div>
+                
+                <a href="https://www.meta.com/metaverse/what-is-the-metaverse/" class="btn" style="margin-top: 50px;">Enter Metaverse <i class="fas fa-door-open"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Technologies -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">2025 Technologies</h2>
+                <p class="section-subtitle">Experience the cutting edge of reading innovation</p>
+            </div>
+            
+            <div class="card-grid">
+                <!-- Tech Card 1 -->
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-mind-share"></i>
+                    </div>
+                    <h3 class="card-title">Neuro-Adaptive Reading</h3>
+                    <p class="card-content">EEG sensors adjust content based on your cognitive state for optimal focus and retention.</p>
+                </div>
+                
+                <!-- Tech Card 2 -->
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3 class="card-title">Real-Time Translation</h3>
+                    <p class="card-content">Read any book in any language with our neural translation that preserves nuance and style.</p>
+                </div>
+                
+                <!-- Tech Card 3 -->
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="card-title">AI Narration</h3>
+                    <p class="card-content">Customizable AI narrators that adapt to your preferences for voice, pace, and style.</p>
+                </div>
+                
+                <!-- Tech Card 4 -->
+                <div class="feature-card">
+                    <div class="card-icon">
+                        <i class="fas fa-cloud-download-alt"></i>
+                    </div>
+                    <h3 class="card-title">Neural Sync</h3>
+                    <p class="card-content">Seamlessly switch between devices while maintaining reading position and annotations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container" id="footer">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>BookHub</h3>
+                    <p style="margin-bottom: 25px; color: var(--text-secondary);">The future of reading is here. Join us in redefining how the world experiences books and knowledge.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/jahidads1" target="_blank"><i class="fab fa-facebook"></i></a>
+                        <a href="https://x.com/jahidhasan_tw" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/jahidhasan2.0ff/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://bd.linkedin.com/in/jahidads" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Technologies</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-robot"></i> AI Reading Assistant</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-vr-cardboard"></i> AR Experiences</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-book-reader"></i> NFT Books</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-brain"></i> Neuro-Adaptive Tech</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-globe"></i> Metaverse Library</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Features</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-book"></i> Neural Recommendations</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-user-cog"></i> Adaptive Reading</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-microchip"></i> Holographic Books</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-language"></i> Real-time Translation</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-sync-alt"></i> Cross-Device Sync</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-graduation-cap"></i> Learning Hub</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-book-open"></i> Developer Portal</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-blog"></i> Neuro-Blog</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-calendar-alt"></i> Virtual Events</a></li>
+                        <li><a href="https://jahidads.github.io/WorkHub/"><i class="fas fa-headset"></i> Support Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2025 BookHub Technologies. Design by Jahid Hasan. | <a href="https://jahidads.github.io/WorkHub/" style="color: var(--accent);">Privacy Policy</a> | <a href="https://jahidads.github.io/WorkHub/" style="color: var(--accent);">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animate elements on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to check if element is in viewport
+            function isInViewport(element) {
+                const rect = element.getBoundingClientRect();
+                return (
+                    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.bottom >= 0
+                );
+            }
+            
+            // Function to handle scroll animations
+            function handleScrollAnimations() {
+                const cards = document.querySelectorAll('.feature-card');
+                cards.forEach(card => {
+                    if (isInViewport(card)) {
+                        card.style.opacity = "1";
+                        card.style.transform = "translateY(0)";
+                    }
+                });
+            }
+            
+            // Initialize card styles
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach(card => {
+                card.style.opacity = "0";
+                card.style.transform = "translateY(30px)";
+                card.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+            });
+            
+            // Initial check
+            handleScrollAnimations();
+            
+            // Check on scroll
+            window.addEventListener('scroll', handleScrollAnimations);
+            
+            // Add hover effect to cards
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = "translateY(-15px)";
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    if (isInViewport(this)) {
+                        this.style.transform = "translateY(0)";
+                    }
+                });
+            });
+            
+            // Add interactive effect to buttons
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.background = "linear-gradient(135deg, var(--neon), var(--accent))";
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    if (this.classList.contains('btn-outline')) {
+                        this.style.background = "transparent";
+                    } else {
+                        this.style.background = "linear-gradient(135deg, var(--accent), var(--neon))";
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
